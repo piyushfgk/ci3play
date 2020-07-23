@@ -18,6 +18,11 @@ class Pages extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	public function __construct(){
+		parent::__construct();
+	} 
+
 	public function index()
 	{
 		$data = array(
@@ -40,4 +45,24 @@ class Pages extends CI_Controller {
 		$this->load->view('pages/'.$page, $data);
 		$this->load->view('templates/footer', $data);
 	}
+
+	public function post($post_number = NULL){
+		
+		$posts[] = "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ipsum, explicabo iure.";
+		$posts[] = "adipisci dolorem esse maiores! Autem, eligendi corrupti commodi veritatis odit ipsa nobis dolorum";
+		$posts[] = "Vel velit, vero doloribus voluptatem aspernatur cumque necessitatibus.";
+		$posts[] = "Quod laboriosam maiores omnis consequuntur eos, accusantium, atque ea temporibus tenetur";
+		$posts[] = "dolore sint nostrum maxime optio recusandae, voluptatum mollitia";
+		$posts[] = "Repudiandae aliquid est voluptatem voluptatibus blanditiis";
+
+		if($post_number > (count($posts) - 1) || empty($post_number) ) $post_number = 0;
+
+		$data = array(
+			"page"		=> (object) ["title" => 'Posts'],
+			"heading"	=> "Your posts will show here !",
+			"post"		=> "This is post number {$posts[$post_number]}"
+		);
+
+		$this->view('home', $data);
+	}	
 }
