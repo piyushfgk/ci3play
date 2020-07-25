@@ -1,6 +1,15 @@
 # CodeIgniter 3 Playground for Learning (ci3play.home.in)
 
 ## History
+**25/07/2020 02:00 Hrs**
+- Show all post or by specific id order by post added date
+- Create post controller
+- New create post form with form validation
+- New Post model for
+    - checking database & Create Table (Using Forge and Util)
+    - get posts (all or by id)
+    - add new post
+
 **23/07/2020 23:00 Hrs**
 - Added constructor in Controller
 - Eliminate use of index.php in url

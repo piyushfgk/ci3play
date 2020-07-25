@@ -8,3 +8,13 @@
 	<title><?= $page->title; ?></title>
 </head>
 <body>
+<div class="container pt-2">
+	<ul class="nav nav-pills justify-content-end">
+		<li class="nav-item">
+			<a class="nav-link <?php echo $page->title == 'Home' ? 'active' : NULL; ?>" aria-current="page" href="<?= base_url() ?>">Home</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link <?php echo $page->title == 'Posts' ? 'active' : NULL; ?>" href="<?= base_url() ?>pages/post">Posts</a>
+		</li>
+	</ul>
+</div>
