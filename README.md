@@ -1,7 +1,12 @@
 # CodeIgniter 3 Playground for Learning (ci3play.home.in)
 
 ## History
-**25/07/2020 02:00 Hrs**
+**26/07/2020 15:00 Hrs**
+- Used custom helpers
+- Edit a post
+- Hard / Soft delete a post
+
+**26/07/2020 02:00 Hrs**
 - Show all post or by specific id order by post added date
 - Create post controller
 - New create post form with form validation

@@ -65,16 +65,18 @@ class PostModel extends CI_Model {
         if($this->dbforge->create_table($this->table, TRUE)) echo "Table created {$this->table}";
     }
 
-    public function get_posts($id = NULL){
+    public function get($id = NULL){
         
         if(!empty($id)){
-            $query = $this->db->get_where($this->table, ["id" => $id]);
+            $query = $this->db->get_where($this->table, array("id" => $id, "status !=" => 'D'));
+            $result = $query->result_array()[0];
         }else{
-            $this->db->order_by('added_on', 'DESC');
-            $query = $this->db->get($this->table);
+            $this->db->order_by('updated_on DESC, added_on DESC');
+            $query = $this->db->get_where($this->table, array("status !=" => 'D'));
+            $result = $query->result();
         }
 
-        return $query->result();
+        return $result;
     }
     
     public function add(){
@@ -85,5 +87,29 @@ class PostModel extends CI_Model {
 
         return $this->db->insert($this->table, $this);
     }
+
+    public function delete($id, $hard_delete = FALSE){
+       
+        if($hard_delete){
+            
+            return $this->db->delete($this->table, array("id" => $id));
+
+        }else{
+            $this->updated_on = date('Y-m-d H:i:s');
+            $this->status = 'D';
     
+            return $this->db->update($this->table, $this, array("id" => $id));
+        }
+        
+    }
+ 
+    public function update($id){
+
+        $this->title = $this->input->post('title');
+        $this->description = $this->input->post('description');
+        $this->updated_on = date('Y-m-d H:i:s');
+        $this->status = 'U';
+
+        return $this->db->update($this->table, $this, array("id" => $id));
+    }
 }

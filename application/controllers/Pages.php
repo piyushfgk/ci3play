@@ -55,9 +55,16 @@ class Pages extends CI_Controller {
 		$data = array(
 			"page"		=> (object) ["title" => 'Posts'],
 			"heading"	=> "Your posts will show here !",
-			"posts"		=> $this->PM->get_posts($post_number)
+			"posts"		=> $this->PM->get($post_number)
 		);
 		
 		$this->view('home', $data);
+	}	
+
+	public function delete($id){
+
+		$this->PM->delete($id);
+
+		$this->post();
 	}	
 }
