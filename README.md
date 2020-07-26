@@ -1,4 +1,7 @@
 # CodeIgniter 3 Playground for Learning (ci3play.home.in)
+## You can run this project online by setting without quotes '35.192.57.184	ci3play.home.in' in your hosts file 
+- Windows (C:\WINDOWS\system32\drivers\etc\hosts)
+- Unix or Mac (/etc/hosts)
 
 ## History
 **26/07/2020 15:00 Hrs**
