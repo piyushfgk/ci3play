@@ -3,7 +3,12 @@
 - Windows (C:\WINDOWS\system32\drivers\etc\hosts)
 - Unix or Mac (/etc/hosts)
 
-## History
+## Project History
+**27/07/2020 07:30 Hrs**
+- Autoload session
+- Use of session flashdata for displaying post create table, add, update & delete message
+- Use of latest_by field to always show recent post
+
 **26/07/2020 15:00 Hrs**
 - Used custom helpers
 - Edit a post

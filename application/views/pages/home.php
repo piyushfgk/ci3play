@@ -1,7 +1,7 @@
 <div class="container mt-5">
-	<?php if(!empty($db)): ?>
-		<div class="mt-3 alert alert-<?= $db->status ?> alert-dismissible fade show" role="alert">
-			<i class="fa fa-<?= $db->icon ?>"></i> <?= $db->message ?>
+	<?php if($this->session->flashdata('db_status')): ?>
+		<div class="mt-3 alert alert-<?= $this->session->flashdata('db_status')->status ?> alert-dismissible fade show" role="alert">
+			<i class="fa fa-<?= $this->session->flashdata('db_status')->icon ?>"></i> <?= $this->session->flashdata('db_status')->message ?>
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
     			<span aria-hidden="true">&times;</span>
   			</button>

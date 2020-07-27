@@ -57,14 +57,14 @@ class Posts extends CI_Controller {
         {
             $status = $this->PM->add();
 
+            $this->session->set_flashdata('db_status', (object) array(
+                "status"  => $status === FALSE ? "danger" : "success",
+                "message" => $status === FALSE ? "Post submission error" : "New post added successfully" ,
+                "icon"    => $status === FALSE ? "times" : "check" ,
+            ));
+
             $data = array(
                 "page"		=> (object) ["title" => 'Posts'],
-                "db"        => (object) [
-                    "status"  => $status === FALSE ? "danger" : "success",
-                    "message" => $status === FALSE ? "Post submission error" : "New post added successfully" ,
-                    "icon"    => $status === FALSE ? "times" : "check" ,
-
-                ],
                 "posts"		=> $this->PM->get()
             );
             
@@ -94,14 +94,14 @@ class Posts extends CI_Controller {
         {
             $status = $this->PM->update($id);
 
+            $this->session->set_flashdata('db_status', (object) array(
+                "status"  => $status === FALSE ? "danger" : "success",
+                "message" => $status === FALSE ? "Post updation error" : "Post updated successfully" ,
+                "icon"    => $status === FALSE ? "times" : "check" ,
+            ));
+
             $data = array(
                 "page"		=> (object) ["title" => 'Posts'],
-                "db"        => (object) [
-                    "status"  => $status === FALSE ? "danger" : "success",
-                    "message" => $status === FALSE ? "Post updation error" : "Post updated successfully" ,
-                    "icon"    => $status === FALSE ? "times" : "check" ,
-
-                ],
                 "posts"		=> $this->PM->get()
             );
             
@@ -129,17 +129,17 @@ class Posts extends CI_Controller {
         }
         else
         {
-            if(isset($_POST['delete'])) $status = $this->PM->delete($id);
-            if(isset($_POST['hard_delete'])) $status = $this->PM->delete($id, TRUE);
+            if($this->input->post('action') === 'delete') $status = $this->PM->delete($id);
+            if($this->input->post('action') === 'hard_delete') $status = $this->PM->delete($id, TRUE);
             
+            $this->session->set_flashdata('db_status', (object) array(
+                "status"  => $status === FALSE ? "danger" : "success",
+                "message" => $status === FALSE ? "Post deletion error" : "Post deleted successfully" ,
+                "icon"    => $status === FALSE ? "times" : "check" ,
+            ));
+
             $data = array(
                 "page"		=> (object) ["title" => 'Posts'],
-                "db"        => (object) [
-                    "status"  => $status === FALSE ? "danger" : "success",
-                    "message" => $status === FALSE ? "Post deletion error" : "Post deleted successfully" ,
-                    "icon"    => $status === FALSE ? "times" : "check" ,
-
-                ],
                 "posts"		=> $this->PM->get()
             );
             

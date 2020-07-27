@@ -21,20 +21,20 @@
 
         <?php if($page->title == 'Edit Post'): ?> 
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save Post</button>
+                <button type="submit" class="btn btn-success" name="action" value="save_post" ><i class="fa fa-save"></i> Save Post</button>
                 <a href="<?= base_url('pages/post') ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a> 
             </div>
         <?php endif; ?>
         <?php if($page->title == 'Delete Post'): ?> 
             <div class="d-flex justify-content-between">
                 <div>
-                    <button type="submit" class="btn btn-warning" name="delete"><i class="fa fa-trash"></i> Delete</button>
+                    <button type="submit" class="btn btn-warning" name="action" value="delete"><i class="fa fa-trash"></i> Delete</button>
                     <a href="<?= base_url('pages/post') ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
                 </div>
-                <button type="submit" class="btn btn-danger" name="hard_delete"><i class="fa fa-recycle"></i> Hard Delete</button>
+                <button type="submit" class="btn btn-danger" name="action" value="hard_delete"><i class="fa fa-recycle"></i> Hard Delete</button>
             </div>
         <?php endif; ?>
-        <?php if($page->title == 'Create Post'): ?> <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add Post</button> <?php endif; ?>
+        <?php if($page->title == 'Create Post'): ?> <button type="submit" name="action" value="create_post" class="btn btn-primary"><i class="fa fa-plus"></i> Add Post</button> <?php endif; ?>
     </form>
     <?php endif; ?>
 

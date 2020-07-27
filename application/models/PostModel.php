@@ -13,6 +13,8 @@ class PostModel extends CI_Model {
         $this->load->dbforge();
         
         $this->createDatabase();
+
+        $this->latest_by = date('Y-m-d H:i:s');
     }
 
     public function createDatabase(){
@@ -22,6 +24,8 @@ class PostModel extends CI_Model {
                 $this->createTable();
             }
         }else{
+            /**This code is for test purpose only. 
+             * Above code will always executes, if connection to database established */
             if($this->dbforge->create_database($this->db->database)){
                 $this->createTable();
             }
@@ -52,6 +56,9 @@ class PostModel extends CI_Model {
                 'type' => 'DATETIME',
                 'null' => TRUE,
             ),
+            'latest_by' => array(
+                'type' => 'DATETIME',
+            ),
             'status' => array(
                 'type' => 'CHAR',
                 'constraint' => 1,
@@ -62,7 +69,21 @@ class PostModel extends CI_Model {
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id', TRUE); // gives PRIMARY KEY (id)
                 
-        if($this->dbforge->create_table($this->table, TRUE)) echo "Table created {$this->table}";
+        
+        if($this->dbforge->create_table($this->table, TRUE)){
+            $this->session->set_flashdata('db_status', (object) array(
+                "status"  => "success",
+                "message" => "Table <strong>{$this->table}</strong> created successfully" ,
+                "icon"    => "check" ,
+            ));
+        }else{
+            $this->session->set_flashdata('db_status', (object) array(
+                "status"  => "danger",
+                "message" => "Error creating table <strong>{$this->table}</strong>",
+                "icon"    => "times",
+            ));
+        }
+         
     }
 
     public function get($id = NULL){
@@ -71,7 +92,7 @@ class PostModel extends CI_Model {
             $query = $this->db->get_where($this->table, array("id" => $id, "status !=" => 'D'));
             $result = $query->result_array()[0];
         }else{
-            $this->db->order_by('updated_on DESC, added_on DESC');
+            $this->db->order_by('latest_by DESC');
             $query = $this->db->get_where($this->table, array("status !=" => 'D'));
             $result = $query->result();
         }
