@@ -4,6 +4,13 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**28/07/2020 21:15 Hrs**
+- Use redirect method to go back to posts section after successfull add, edit or deletion
+- Remove index method from Posts controller as its not required
+- User form open and close method
+- Now using bit more validation rules with custom message for each rule
+- Using nl2br() php method in displaying a post
+
 **27/07/2020 07:30 Hrs**
 - Autoload session
 - Use of session flashdata for displaying post create table, add, update & delete message

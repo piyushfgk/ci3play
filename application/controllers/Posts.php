@@ -12,16 +12,6 @@ class Posts extends CI_Controller {
         
     } 
 
-    public function index(){
-
-        $data = array(
-			"page"		=> (object) ["title" => 'Create Post'],
-        );        
-
-        
-		$this->view('posts', $data);
-    }
-
 	public function view($page = 'posts', $data = array()){
 
 		if ( ! file_exists(APPPATH.'views/pages/'.$page.'.php'))
@@ -36,9 +26,21 @@ class Posts extends CI_Controller {
     }
     
     private function validate_form(){
+        
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('title', 'Post Title', 'required');
-        $this->form_validation->set_rules('description', 'Post Description', 'required');
+        
+        /** You can not use space between pipes | 
+         * Rules must be adjacent to one another seperated by pipes only
+         * */ 
+        $this->form_validation->set_rules('title', 'Post Title', 'required|min_length[5]|max_length[100]', array(
+            "min_length"   => "%s must be at least 5 characters long",
+            "max_length"   => "%s can not be greater than 100 characters",
+        ));
+        
+        $this->form_validation->set_rules('description', 'Post Description', 'required|min_length[30]', array(
+            "required" => "%s can not left blank !", 
+            "min_length" => "%s must be at least 30 characters long")
+        );
     }
 
     public function add(){
@@ -68,7 +70,8 @@ class Posts extends CI_Controller {
                 "posts"		=> $this->PM->get()
             );
             
-            $this->view('home', $data);
+            //$this->view('home', $data));
+            redirect(base_url('pages/post'),'refresh');
         }
 		
     }
@@ -105,7 +108,8 @@ class Posts extends CI_Controller {
                 "posts"		=> $this->PM->get()
             );
             
-            $this->view('home', $data);
+            // $this->view('home', $data);
+            redirect(base_url('pages/post'),'refresh');
         }
     }
 
@@ -143,7 +147,8 @@ class Posts extends CI_Controller {
                 "posts"		=> $this->PM->get()
             );
             
-            $this->view('home', $data);
+            // $this->view('home', $data);
+            redirect(base_url('pages/post'),'refresh');
         }
     }
 

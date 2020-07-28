@@ -1,12 +1,14 @@
-<div class="container">
+<div class="container mt-3">
 
     <?php if($page->title == 'Create Post' || $page->title == 'Edit Post' || $page->title == 'Delete Post'): ?>
     
-    <?php //echo validation_errors(); ?>
+    <a href="<?= base_url('pages/post') ?>" class="btn btn-sm btn-dark"><i class="fa fa-arrow-left"></i> Back</a>
 
-    <?php if($page->title == 'Edit Post'): ?> <form action="<?= base_url('posts/edit/'.set_value('id')) ?>" method="post"> <?php endif; ?>
-    <?php if($page->title == 'Delete Post'): ?> <form action="<?= base_url('posts/delete/'.set_value('id')) ?>" method="post"> <?php endif; ?>
-    <?php if($page->title == 'Create Post'): ?> <form action="<?= base_url('posts/add') ?>" method="post"> <?php endif; ?>
+    <?php echo validation_errors('<div class="alert alert-danger mt-3" role="alert">','</div>'); ?>
+
+    <?php if($page->title == 'Edit Post') echo form_open('posts/edit/'.set_value('id'), array("class" => "mt-3 needs-validation")); ?>
+    <?php if($page->title == 'Delete Post') echo form_open('posts/delete/'.set_value('id'), array("class" => "mt-3 needs-validation")); ?>
+    <?php if($page->title == 'Create Post') echo form_open('posts/add', array("class" => "mt-3 needs-validation")); ?>
     
         <div class="mb-3">
             <label for="title" class="form-label">Post Title</label>
@@ -34,8 +36,11 @@
                 <button type="submit" class="btn btn-danger" name="action" value="hard_delete"><i class="fa fa-recycle"></i> Hard Delete</button>
             </div>
         <?php endif; ?>
-        <?php if($page->title == 'Create Post'): ?> <button type="submit" name="action" value="create_post" class="btn btn-primary"><i class="fa fa-plus"></i> Add Post</button> <?php endif; ?>
-    </form>
+        <?php if($page->title == 'Create Post'): ?> 
+            <button type="submit" name="action" value="create_post" class="btn btn-primary"><i class="fa fa-plus"></i> Add Post</button> 
+        <?php endif; ?>
+   
+    <?= form_close() ?>
     <?php endif; ?>
 
 </div>

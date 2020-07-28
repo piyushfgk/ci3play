@@ -9,7 +9,7 @@
 	<?php endif; ?>
 
 	<?php if($page->title == 'Posts'): ?>
-		<a href="<?= base_url('posts') ?>" class="btn btn-info"><i class="fa fa-plus"></i> Create Post</a>
+		<a href="<?= base_url('posts/add') ?>" class="btn btn-info"><i class="fa fa-plus"></i> Create Post</a>
 		<?php foreach($posts as $post): ?>
 			<div class="card my-3">
 				<div class="card-header">
@@ -23,7 +23,7 @@
 				</div>
 				<div class="card-body">
 					<p class="card-title text-right text-secondary"><strong>Added on:</strong> <?= indate($post->added_on) ?></p>
-					<p class="card-text"><?= $post->description ?></p>
+					<p class="card-text"><?= nl2br($post->description) ?></p>
 				</div>
 			</div>
 		<?php endforeach; ?>
