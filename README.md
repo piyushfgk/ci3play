@@ -4,6 +4,15 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**29/07/2020 23:00 Hrs**
+- Project flow has been changed alot, earlier posts shown in Posts page is now moved to Home page
+- UI changed including navbar and footer
+- New login/sign-in page added 
+- New route added for posts
+
+**28/07/2020 22:55 Hrs**
+- Using $query->row() for getting only single object
+
 **28/07/2020 21:15 Hrs**
 - Use redirect method to go back to posts section after successfull add, edit or deletion
 - Remove index method from Posts controller as its not required

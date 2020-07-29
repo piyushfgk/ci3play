@@ -31,13 +31,19 @@ class Pages extends CI_Controller {
 	{
 		$data = array(
 			"page"		=> (object) ["title" => 'Home'],
-			"heading"	=> "Hi, Welcome to CI3 playground !"
+			"heading"	=> "Hi, Welcome to CI3 playground ! <p class='h6 mt-2 text-center'>All your new posts will show here !</p>",
+			"posts"		=> $this->PM->get()
 		);
 
-		$this->view('home', $data);
+		if(!$this->session->userdata('user_id')){
+			redirect(base_url('pages/login'), 'refresh');
+		}else{
+			$this->view('home', $data);
+		}
+		
 	}
 
-	public function view($page = 'home', $data = array()){
+	protected function view($page = 'home', $data = array()){
 
 		if ( ! file_exists(APPPATH.'views/pages/'.$page.'.php'))
         {
@@ -50,21 +56,26 @@ class Pages extends CI_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 
-	public function post($post_number = NULL){
-
-		$data = array(
-			"page"		=> (object) ["title" => 'Posts'],
-			"heading"	=> "Your posts will show here !",
-			"posts"		=> $this->PM->get($post_number)
-		);
-		
-		$this->view('home', $data);
-	}	
-
 	public function delete($id){
 
 		$this->PM->delete($id);
 
 		$this->post();
 	}	
+
+	public function login(){
+		$data = array(
+			"page"		=> (object) ["title" => 'Login'],
+		);
+		
+		$this->view('login', $data);
+	}
+
+	public function registration(){
+		$data = array(
+			"page"		=> (object) ["title" => 'Registration'],
+		);
+		
+		$this->view('registration', $data);
+	}
 }

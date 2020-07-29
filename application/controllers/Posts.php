@@ -6,13 +6,16 @@ class Posts extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 
-		$this->load->helper(array('form', 'url'));
+        $this->load->helper(array('form', 'url'));
+        
+        if(!$this->session->userdata('user_id')) redirect(base_url('pages/login'),'refresh');
+
 		/** Load Model */
         $this->load->model('PostModel', 'PM');
         
     } 
 
-	public function view($page = 'posts', $data = array()){
+	protected function view($page = 'posts', $data = array()){
 
 		if ( ! file_exists(APPPATH.'views/pages/'.$page.'.php'))
         {
@@ -67,11 +70,10 @@ class Posts extends CI_Controller {
 
             $data = array(
                 "page"		=> (object) ["title" => 'Posts'],
-                "posts"		=> $this->PM->get()
             );
             
             //$this->view('home', $data));
-            redirect(base_url('pages/post'),'refresh');
+            redirect(base_url(), 'refresh');
         }
 		
     }
@@ -109,7 +111,7 @@ class Posts extends CI_Controller {
             );
             
             // $this->view('home', $data);
-            redirect(base_url('pages/post'),'refresh');
+            redirect(base_url(), 'refresh');
         }
     }
 
@@ -148,7 +150,7 @@ class Posts extends CI_Controller {
             );
             
             // $this->view('home', $data);
-            redirect(base_url('pages/post'),'refresh');
+            redirect(base_url(), 'refresh');
         }
     }
 

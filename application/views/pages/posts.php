@@ -1,8 +1,8 @@
-<div class="container mt-3">
+<div class="container mt-5">
 
     <?php if($page->title == 'Create Post' || $page->title == 'Edit Post' || $page->title == 'Delete Post'): ?>
     
-    <a href="<?= base_url('pages/post') ?>" class="btn btn-sm btn-dark"><i class="fa fa-arrow-left"></i> Back</a>
+    <a href="<?= base_url() ?>" class="btn btn-sm btn-info mt-5"><i class="fa fa-arrow-left"></i> Back</a>
 
     <?php echo validation_errors('<div class="alert alert-danger mt-3" role="alert">','</div>'); ?>
 
@@ -24,14 +24,14 @@
         <?php if($page->title == 'Edit Post'): ?> 
             <div class="d-flex justify-content-between">
                 <button type="submit" class="btn btn-success" name="action" value="save_post" ><i class="fa fa-save"></i> Save Post</button>
-                <a href="<?= base_url('pages/post') ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a> 
+                <a href="<?= base_url() ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a> 
             </div>
         <?php endif; ?>
         <?php if($page->title == 'Delete Post'): ?> 
             <div class="d-flex justify-content-between">
                 <div>
                     <button type="submit" class="btn btn-warning" name="action" value="delete"><i class="fa fa-trash"></i> Delete</button>
-                    <a href="<?= base_url('pages/post') ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
+                    <a href="<?= base_url() ?>" class="btn btn-secondary"><i class="fa fa-times"></i> Cancel</a>
                 </div>
                 <button type="submit" class="btn btn-danger" name="action" value="hard_delete"><i class="fa fa-recycle"></i> Hard Delete</button>
             </div>

@@ -90,7 +90,7 @@ class PostModel extends CI_Model {
         
         if(!empty($id)){
             $query = $this->db->get_where($this->table, array("id" => $id, "status !=" => 'D'));
-            $result = $query->result_array()[0];
+            $result = $query->row();
         }else{
             $this->db->order_by('latest_by DESC');
             $query = $this->db->get_where($this->table, array("status !=" => 'D'));

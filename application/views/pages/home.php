@@ -10,6 +10,10 @@
 
 	<?php if($page->title == 'Posts'): ?>
 		<a href="<?= base_url('posts/add') ?>" class="btn btn-info"><i class="fa fa-plus"></i> Create Post</a>
+	<?php endif; ?>	
+
+	<?php if($page->title == 'Home'): ?>
+		<?php if(!empty($posts)): ?>
 		<?php foreach($posts as $post): ?>
 			<div class="card my-3">
 				<div class="card-header">
@@ -37,5 +41,5 @@
 				<p class="card-text"></p>
 			</div>
 		</div>
-	<?php endif; ?>
+	<?php endif; endif; ?>
 </div>
