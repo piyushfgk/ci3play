@@ -4,7 +4,7 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
-**30/07/2020 17:45 Hrs**
+**30/07/2020 19:00 Hrs**
 - New User Model for user Login & Registration
 - Registration completed with all common validation rules
 - In Login page, entered email id will be check if exists

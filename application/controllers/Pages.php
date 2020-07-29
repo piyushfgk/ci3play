@@ -31,7 +31,7 @@ class Pages extends CI_Controller {
 	{
 		$data = array(
 			"page"		=> (object) ["title" => 'Home'],
-			"heading"	=> "Hi, Welcome to CI3 playground ! <p class='h6 mt-2 text-center'>All your new posts will show here !</p>",
+			"heading"	=> "Hi, Welcome to CI3 playground ! <p class='h6 bg-info text-light py-2 mt-2 text-center'>Add a new post using <a class=\"text-secondary\" href=\"".base_url('post')."\">Posts</a> menu !</p>",
 			"posts"		=> $this->PM->get()
 		);
 
@@ -93,7 +93,7 @@ class Pages extends CI_Controller {
 		else
 		{
 			$result = $this->UM->get($this->input->post('email'));
-			
+		
 			if(password_verify($this->input->post('password'), $result->password)){
 				
 				$this->session->set_userdata('user_tabid', $result->user_id);

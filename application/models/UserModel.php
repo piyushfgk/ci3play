@@ -88,7 +88,7 @@ class UserModel extends CI_Model {
     }
 
     public function get($email = NULL){
-        
+       
         if(!empty($email)){
             $query = $this->db->get_where($this->table, array("email" => $email, "status" => 'A'));
             $result = $query->row();
@@ -102,9 +102,10 @@ class UserModel extends CI_Model {
 
     public function register(){
 
-        $this->name = $this->input->post('name');
-        $this->email = $this->input->post('email');
+        $this->name = ucwords(strtolower($this->input->post('name')));
+        $this->email = strtolower($this->input->post('email'));
         $this->password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+        $this->status = 'A'; // Default user status will be activated, will change after email verification added
         $this->added_on = date('Y-m-d H:i:s');
 
         return $this->db->insert($this->table, $this);
