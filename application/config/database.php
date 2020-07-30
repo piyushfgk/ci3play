@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => '172.68.210.183',
 	'username' => 'Administrator',
 	'password' => 'nochange',
-	'database' => 'ci4',
+	'database' => 'eadmin',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => 'ci3_',
 	'pconnect' => FALSE,

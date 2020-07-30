@@ -4,6 +4,11 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**30/07/2020 17:45 Hrs**
+- New User Model for user Login & Registration
+- Registration completed with all common validation rules
+- In Login page, entered email id will be check if exists
+
 **29/07/2020 23:00 Hrs**
 - Project flow has been changed alot, earlier posts shown in Posts page is now moved to Home page
 - UI changed including navbar and footer

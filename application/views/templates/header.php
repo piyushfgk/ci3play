@@ -11,9 +11,9 @@
 
 	<header>
 		<!-- Fixed navbar -->
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-dark">
 			<div class="container-fluid">
-				<a class="navbar-brand" href="<?= base_url() ?>">My Blog</a>
+				<a class="navbar-brand" href="<?= base_url() ?>"><img class="" src="<?= base_url('img/brand_logo.png') ?>" alt="" width="32" height="32"> My Blog</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
@@ -26,9 +26,33 @@
 							<a class="nav-link <?php echo $page->title == 'Posts' || $page->title == 'Create Post' || $page->title == 'Edit Post' || $page->title == 'Delete Post' ? 'active' : NULL; ?>" href="<?= base_url() ?>post">Posts</a>
 						</li>
 					</ul>
-					<a class="btn btn-outline-info" href="#">Sign up</a>
+					<?php if($this->session->userdata('user_id')): ?>
+						<ul class="ml-auto mb-2 mb-md-0">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+									<i class="fa fa-user"></i> <?= $this->session->userdata('user_name') ?>
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<li><a class="dropdown-item" href="<?= base_url('logout') ?>"><i class="fa fa-sign-out-alt"></i> Logout</a></li>
+								</ul>
+							</li>
+						</ul>
+					<?php else: ?>
+						<a class="btn btn-outline-info" href="<?= base_url('pages/registration') ?>">Sign up</a>
+					<?php endif;?>
 				</div>
 				
 			</div>
 		</nav>
 	</header>
+
+	<?php if($this->session->flashdata('db_status')): ?>
+		<div class="div container mt-3">
+			<div class="mt-3 alert alert-<?= $this->session->flashdata('db_status')->status ?> alert-dismissible fade show" role="alert">
+				<i class="fa fa-<?= $this->session->flashdata('db_status')->icon ?>"></i> <?= $this->session->flashdata('db_status')->message ?>
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+		</div>
+	<?php endif; ?>

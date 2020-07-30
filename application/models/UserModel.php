@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class PostModel extends CI_Model {
+class UserModel extends CI_Model {
     
-    protected $table = 'posts';
+    protected $table = 'users';
 
     public function __construct(){
         parent::__construct();
@@ -13,9 +13,6 @@ class PostModel extends CI_Model {
         $this->load->dbforge();
         
         $this->createDatabase();
-
-        $this->latest_by = date('Y-m-d H:i:s');
-        $this->created_by = $this->session->userdata('user_tabid');
     }
 
     public function createDatabase(){
@@ -37,18 +34,24 @@ class PostModel extends CI_Model {
     public function createTable(){
 
         $fields = array(
-            'id' => array(
+            'user_id' => array(
                 'type' => 'INT',
                 'constraint' => 5,
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE,
             ),
-            'title' => array(
+            'email' => array(
                 'type' => 'VARCHAR',
                 'constraint' => '100',
+                'unique' => TRUE
             ),
-            'description' => array(
-                'type' => 'TEXT',
+            'name' => array(
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ),
+            "password" => array(
+                'type' => 'VARCHAR',
+                'constraint' => 80,
             ),
             'added_on' => array(
                 'type' => 'DATETIME',
@@ -57,23 +60,15 @@ class PostModel extends CI_Model {
                 'type' => 'DATETIME',
                 'null' => TRUE,
             ),
-            'latest_by' => array(
-                'type' => 'DATETIME',
-            ),
-            'created_by' => array(
-                'type' => 'INT',
-                'constraint' => 5,
-                'unsigned' => TRUE,
-            ),
             'status' => array(
                 'type' => 'CHAR',
                 'constraint' => 1,
-                "default" => 'A',
+                "default" => 'R',
             ),
         );
 
         $this->dbforge->add_field($fields);
-        $this->dbforge->add_key('id', TRUE); // gives PRIMARY KEY (id)
+        $this->dbforge->add_key('user_id', TRUE); // gives PRIMARY KEY (user_id)
                 
         
         if($this->dbforge->create_table($this->table, TRUE)){
@@ -92,51 +87,27 @@ class PostModel extends CI_Model {
          
     }
 
-    public function get($id = NULL){
+    public function get($email = NULL){
         
-        if(!empty($id)){
-            $query = $this->db->get_where($this->table, array("id" => $id, "status !=" => 'D'));
+        if(!empty($email)){
+            $query = $this->db->get_where($this->table, array("email" => $email, "status" => 'A'));
             $result = $query->row();
         }else{
-            $this->db->order_by('latest_by DESC');
-            $query = $this->db->get_where($this->table, array("status !=" => 'D'));
+            $query = $this->db->get_where($this->table);
             $result = $query->result();
         }
 
         return $result;
     }
-    
-    public function add(){
 
-        $this->title = $this->input->post('title');
-        $this->description = $this->input->post('description');
+    public function register(){
+
+        $this->name = $this->input->post('name');
+        $this->email = $this->input->post('email');
+        $this->password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
         $this->added_on = date('Y-m-d H:i:s');
 
         return $this->db->insert($this->table, $this);
     }
 
-    public function delete($id, $hard_delete = FALSE){
-       
-        if($hard_delete){
-            
-            return $this->db->delete($this->table, array("id" => $id));
-
-        }else{
-            $this->updated_on = date('Y-m-d H:i:s');
-            $this->status = 'D';
-    
-            return $this->db->update($this->table, $this, array("id" => $id));
-        }
-        
-    }
- 
-    public function update($id){
-
-        $this->title = $this->input->post('title');
-        $this->description = $this->input->post('description');
-        $this->updated_on = date('Y-m-d H:i:s');
-        $this->status = 'U';
-
-        return $this->db->update($this->table, $this, array("id" => $id));
-    }
 }

@@ -1,12 +1,4 @@
 <div class="container mt-5">
-	<?php if($this->session->flashdata('db_status')): ?>
-		<div class="mt-3 alert alert-<?= $this->session->flashdata('db_status')->status ?> alert-dismissible fade show" role="alert">
-			<i class="fa fa-<?= $this->session->flashdata('db_status')->icon ?>"></i> <?= $this->session->flashdata('db_status')->message ?>
-			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    			<span aria-hidden="true">&times;</span>
-  			</button>
-		</div>
-	<?php endif; ?>
 
 	<?php if($page->title == 'Posts'): ?>
 		<a href="<?= base_url('posts/add') ?>" class="btn btn-info"><i class="fa fa-plus"></i> Create Post</a>

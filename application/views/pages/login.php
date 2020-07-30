@@ -5,10 +5,6 @@ body {
 }
 
 body {
-  /* display: flex;
-  align-items: center; */
-  padding-top: 40px;
-  /* padding-bottom: 40px; */
   background-color: #f5f5f5;
 }
 
@@ -43,18 +39,23 @@ body {
 }
 
 </style>
-<form class="form-signin">
-  <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+
+<div class="container mt-2">
+  <?php echo validation_errors('<div class="alert alert-danger" role="alert">','</div>'); ?>
+</div>
+
+<?= form_open('pages/do_login', array("class" => "form-signin")) ?>
+  <img class="mb-4" src="<?= base_url('img/brand_logo.png') ?>" alt="" width="72" height="72">
   <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
   <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+  <input type="email" name="email" id="inputEmail" class="form-control  <?php echo !empty(form_error('email')) ? 'is-invalid' : NULL; ?>" placeholder="Email address" value="<?= set_value('email') ?>" autofocus>
   <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+  <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password"  value="<?= set_value('password') ?>">
   <div class="checkbox mb-3">
     <!-- <label>
       <input type="checkbox" value="remember-me"> Remember me
     </label> -->
   </div>
   <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-
-</form>
+  <p class="text-center mt-2">Not registered ? <a href="<?= base_url('pages/registration') ?>">Sign up</a> </p>  
+<?= form_close() ?>

@@ -6,7 +6,7 @@ class Posts extends CI_Controller {
     public function __construct(){
 		parent::__construct();
 
-        $this->load->helper(array('form', 'url'));
+        // $this->load->helper(array('form', 'url'));
         
         if(!$this->session->userdata('user_id')) redirect(base_url('pages/login'),'refresh');
 
@@ -68,10 +68,6 @@ class Posts extends CI_Controller {
                 "icon"    => $status === FALSE ? "times" : "check" ,
             ));
 
-            $data = array(
-                "page"		=> (object) ["title" => 'Posts'],
-            );
-            
             //$this->view('home', $data));
             redirect(base_url(), 'refresh');
         }
@@ -104,11 +100,6 @@ class Posts extends CI_Controller {
                 "message" => $status === FALSE ? "Post updation error" : "Post updated successfully" ,
                 "icon"    => $status === FALSE ? "times" : "check" ,
             ));
-
-            $data = array(
-                "page"		=> (object) ["title" => 'Posts'],
-                "posts"		=> $this->PM->get()
-            );
             
             // $this->view('home', $data);
             redirect(base_url(), 'refresh');
@@ -143,11 +134,6 @@ class Posts extends CI_Controller {
                 "message" => $status === FALSE ? "Post deletion error" : "Post deleted successfully" ,
                 "icon"    => $status === FALSE ? "times" : "check" ,
             ));
-
-            $data = array(
-                "page"		=> (object) ["title" => 'Posts'],
-                "posts"		=> $this->PM->get()
-            );
             
             // $this->view('home', $data);
             redirect(base_url(), 'refresh');

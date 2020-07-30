@@ -53,3 +53,4 @@ $route['default_controller'] = 'pages';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['post'] = 'posts/add';
+$route['logout'] = 'pages/logout';

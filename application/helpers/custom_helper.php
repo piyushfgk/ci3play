@@ -1,8 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    function Debug($value){
+    function Debug(){
         echo "<pre>";
-        print_r($value);
+
+        foreach(func_get_args() as $key => $debug_var){
+            $count = $key+1;
+   
+            if($debug_var){
+                print_r($debug_var);
+                echo "\n<br>";
+            } else {
+                echo "Debug Error: This {$count} argument has no value\n<br>";
+            }
+        }
+
         echo "</pre>";
     }
 
