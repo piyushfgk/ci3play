@@ -60,6 +60,11 @@ class UserModel extends CI_Model {
                 'type' => 'DATETIME',
                 'null' => TRUE,
             ),
+            'token' => array(
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+                'unique' => TRUE
+            ),
             'status' => array(
                 'type' => 'CHAR',
                 'constraint' => 1,
@@ -88,13 +93,19 @@ class UserModel extends CI_Model {
     }
 
     public function get($email = NULL){
-       
+        
+        $email = strtolower($email);
+
         if(!empty($email)){
-            $query = $this->db->get_where($this->table, array("email" => $email, "status" => 'A'));
+            
+            $query = $this->db->get_where($this->table, array("email" => $email));
             $result = $query->row();
+
         }else{
+
             $query = $this->db->get_where($this->table);
             $result = $query->result();
+
         }
 
         return $result;
@@ -102,13 +113,28 @@ class UserModel extends CI_Model {
 
     public function register(){
 
+        $this->token = random_string('alnum', 50);
         $this->name = ucwords(strtolower($this->input->post('name')));
         $this->email = strtolower($this->input->post('email'));
         $this->password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
-        $this->status = 'A'; // Default user status will be activated, will change after email verification added
         $this->added_on = date('Y-m-d H:i:s');
 
         return $this->db->insert($this->table, $this);
+    }
+
+    public function check_token($token){
+        
+        $query = $this->db->get_where($this->table, array("token" => $token));
+        $result = $query->row();
+
+        return $result;
+    }
+
+    public function user_activate($user_id){
+        $this->updated_on = date('Y-m-d H:i:s');
+        $this->status = 'A';
+
+        return $this->db->update($this->table, $this, array("user_id" => $user_id));
     }
 
 }

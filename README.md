@@ -4,6 +4,11 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**31/07/2020 16:00 Hrs**
+- Genarated App Password in accounts.google.com to send email from my gmail account which has 2 step verification enabled
+- Added email functionality to send
+- Verify emailed token to activate new registered user
+
 **31/07/2020 07:00 Hrs**
 - Using Bootstrap 5 svg icons
     - Use stroke="white" stroke-width="2" property to change default color and change default bolderness

@@ -56,11 +56,17 @@ class Pages extends CI_Controller {
 		$this->load->view('templates/footer', $data);
 	}
 
-	public function login(){
-		$data = array(
-			"page"		=> (object) ["title" => 'Login'],
-		);
+	public function login($data = array()){
 
+		if(empty($data)){
+			$data = array(
+				"page"		=> (object) ["title" => 'Login'],
+				"form"		=> (object) array(
+					"email" => (object) array("autofocus" => true)
+				)
+			);
+		}
+		
 		$this->view('login', $data);
 	}
 
@@ -94,7 +100,13 @@ class Pages extends CI_Controller {
 		{
 			$result = $this->UM->get($this->input->post('email'));
 		
-			if(password_verify($this->input->post('password'), $result->password)){
+			if($result->status == 'R'){
+
+				$status = "info";
+				$message = "You have been registered on ".indate($result->added_on)." Hrs. Please verify your email to login !";
+				$icon = "exclamation-triangle";
+
+			}elseif($result->status == 'A' && password_verify($this->input->post('password'), $result->password)){
 				
 				$this->session->set_userdata('user_tabid', $result->user_id);
 				$this->session->set_userdata('user_id', $result->email);
@@ -102,15 +114,24 @@ class Pages extends CI_Controller {
 
 				redirect(base_url());
 			}else{
-				
-				$this->session->set_flashdata('db_status', (object) array(
-					"status"  => "danger",
-					"message" => "Incorrect login credentials !",
-					"icon"    => "times" ,
-				));
-
-				$this->login();
+				$status = "danger";
+				$message = "Incorrect login credentials !";
+				$icon = "times";
 			}
+				
+			$this->session->set_flashdata('db_status', (object) array(
+				"status"  => $status,
+				"message" => $message,
+				"icon"    => $icon,
+			));
+
+			$this->login(array(
+				"page"		=> (object) ["title" => 'Login'],
+				"form"		=> (object) array(
+					"password" => (object) array("autofocus" => true)
+				)
+			));
+			
 		}
 		 
 	}
@@ -155,13 +176,36 @@ class Pages extends CI_Controller {
 		}
 		else
 		{
+
 			$status = $this->UM->register();
 
 			$this->session->set_flashdata('db_status', (object) array(
 				"status"  => $status === FALSE ? "danger" : "success",
-				"message" => $status === FALSE ? "Registration error" : "Registration successfull! Please login" ,
+				"message" => $status === FALSE ? "Registration error" : "Registration successfull! Please check your email to verify &amp; activate your login !" ,
 				"icon"    => $status === FALSE ? "times" : "check" ,
 			));
+
+			if($status){
+				/** Send email if registration is successfull */
+
+				$user =  $this->UM->get($this->input->post('email'));
+				$verify_link = base_url('email_verify/'.$user->token);
+
+				$subject = 'Please verify your email - ci3play.home.in';
+				$message = '
+							<p>Hello, '.$user->name.'</p>
+							<p>Welcome to&nbsp;<a href="http://ci3play.home.in">ci3play.home.in</a>&nbsp;, please click below button link to verify your email.</p>
+							<p>&nbsp;</p>
+							<p style="padding-left: 50px;"><a href="'.$verify_link.'" style="background-color: #b80c4d; border: #2e6da4; font-family: Arial, Geneva, Arial, Helvetica,  sans-serif; padding: 8px 12px; font-size: 21px; color: #fff; border-radius: 4px; text-decoration: none;">Verify Email</a></p>
+							<p>&nbsp;</p>
+							<p><span style="color: #666699; font-size: 10px;">If above link did not work use copy and paste below link in the browser to verify your email</span>&nbsp;<br />&nbsp;'.$verify_link.'</p>
+							<p>&nbsp;</p>
+							<p>Thanking You,</p>
+							<p><span style="color: #808080;"><strong>Yours Truly</strong></span><br /><span style="color: #808080;"><strong>Piyush Sachan</strong></span></p>
+						';
+				
+				$this->send($user->email, $subject, $message);
+			}
 			
 			redirect(base_url('pages/login'), 'refresh');
 		}
@@ -172,4 +216,70 @@ class Pages extends CI_Controller {
 		$this->session->sess_destroy();
 		redirect(base_url());
 	}
+
+	public function email_verify($token){
+
+		$result = $this->UM->check_token($token);
+
+		if(!empty($result->token)){
+
+			if($result->status == 'R'){
+				$status = $this->UM->user_activate($result->user_id);
+
+				if($status){
+					$status = "success";
+					$message = 'Email successfully verified, Please login !';
+					$icon = "check";
+				
+				}else{
+					$status = "danger";
+					$message = "There is some problem verifying your email please try again later !";
+					$icon = "exclamation-triangle";
+				}
+			}else{
+				$status = "info";
+				$message = "Email already verified. Please login !";
+				$icon = "exclamation-triangle";
+			}
+
+			$this->session->set_flashdata('db_status', (object) array(
+				"status"  => $status,
+				"message" => $message,
+				"icon"    => $icon,
+			));
+
+			$this->login();
+			
+		}else{
+
+			$this->session->set_flashdata('db_status', (object) array(
+				"status"  => 'danger',
+				"message" => 'Invalid Token Error! Email verification failed, Please check your link.',
+				"icon"    => 'exclamation-triangle',
+			));
+
+			$data = array(
+				"page"		=> (object) ["title" => 'Email Verify'],
+			);
+			
+			$this->view('verify_email', $data);
+			
+		}
+
+	}
+
+	protected function send($to, $subject, $message) {
+        $this->load->config('email');
+        $this->load->library('email');
+        
+        $from = $this->config->item('smtp_user');
+        
+        $this->email->set_newline("\r\n");
+        $this->email->from($from);
+        $this->email->to($to);
+        $this->email->subject($subject);
+        $this->email->message($message);
+
+        return $this->email->send();
+    }
 }

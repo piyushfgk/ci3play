@@ -50,9 +50,9 @@ body {
   </svg>
   <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
   <label for="inputEmail" class="sr-only">Email address</label>
-  <input type="email" name="email" id="inputEmail" class="form-control  <?php echo !empty(form_error('email')) ? 'is-invalid' : NULL; ?>" placeholder="Email address" value="<?= set_value('email') ?>" autofocus>
+  <input type="email" name="email" id="inputEmail" class="form-control  <?php echo !empty(form_error('email')) ? 'is-invalid' : NULL; ?>" placeholder="Email address" value="<?= set_value('email') ?>" <?= !empty($form->email->autofocus) ? 'autofocus' : NULL; ?> >
   <label for="inputPassword" class="sr-only">Password</label>
-  <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password"  value="<?= set_value('password') ?>">
+  <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password"  value="<?= set_value('password') ?>" <?= !empty($form->password->autofocus) ? 'autofocus' : NULL; ?> >
   <div class="checkbox mb-3">
     <!-- <label>
       <input type="checkbox" value="remember-me"> Remember me

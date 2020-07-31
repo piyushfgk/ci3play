@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['post'] = 'posts/add';
 $route['logout'] = 'pages/logout';
+$route['email_verify/(:any)'] = 'pages/email_verify/$1';

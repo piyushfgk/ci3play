@@ -8,5 +8,13 @@
 <!-- Popper.js first, then Bootstrap JS -->
 <script src="<?= base_url('js/popper.min.js') ?>" ></script>
 <script src="<?= base_url('js/bootstrap.min.js') ?>"></script>
+<script>
+  /**Enabling bootstrap tooltip everwhere */
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  })
+  /** */
+</script>
 </body>
 </html>

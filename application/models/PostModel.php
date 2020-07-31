@@ -102,6 +102,7 @@ class PostModel extends CI_Model {
             $this->db->order_by('latest_by DESC');
             $this->db->select('*');
             $this->db->from($this->table);
+            $this->db->where("{$this->table}.status !=", 'D');
             $this->db->join('users', 'users.user_id = '.$this->table.'.created_by');
             $query = $this->db->get();
 
