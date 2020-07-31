@@ -4,6 +4,14 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**31/07/2020 07:00 Hrs**
+- Using Bootstrap 5 svg icons
+    - Use stroke="white" stroke-width="2" property to change default color and change default bolderness
+    - Use width="1em" height="1em" property to change size
+    - Use viewBox="0 1 16 16" property to adjust alignment of the icon
+    - Use fill="#fd7e14" to change icon color or using boostrap class in class="text-danger"
+- Using query builder LEFT JOIN to get post with author name
+
 **30/07/2020 19:00 Hrs**
 - New User Model for user Login & Registration
 - Registration completed with all common validation rules

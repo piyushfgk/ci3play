@@ -96,10 +96,15 @@ class PostModel extends CI_Model {
         
         if(!empty($id)){
             $query = $this->db->get_where($this->table, array("id" => $id, "status !=" => 'D'));
+
             $result = $query->row();
         }else{
             $this->db->order_by('latest_by DESC');
-            $query = $this->db->get_where($this->table, array("status !=" => 'D'));
+            $this->db->select('*');
+            $this->db->from($this->table);
+            $this->db->join('users', 'users.user_id = '.$this->table.'.created_by');
+            $query = $this->db->get();
+
             $result = $query->result();
         }
 
