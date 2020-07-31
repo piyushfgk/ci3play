@@ -219,6 +219,11 @@ class Pages extends CI_Controller {
 
 	public function email_verify($token){
 
+		// If user already logged in then destroy current session
+		if($this->session->userdata('user_id')){
+			$this->session->sess_destroy();
+		} 
+
 		$result = $this->UM->check_token($token);
 
 		if(!empty($result->token)){

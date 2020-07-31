@@ -8,6 +8,7 @@
 - Genarated App Password in accounts.google.com to send email from my gmail account which has 2 step verification enabled
 - Added email functionality to send
 - Verify emailed token to activate new registered user
+- User already logged then email verify link should destroy current session and then verify email
 
 **31/07/2020 07:00 Hrs**
 - Using Bootstrap 5 svg icons
