@@ -3,10 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Posts extends MY_Controller
 {
-
     public function __construct()
     {
-
         parent::__construct();
 
         // $this->load->helper(array('form', 'url'));
@@ -15,12 +13,10 @@ class Posts extends MY_Controller
 
         /** Load Model */
         $this->load->model('PostModel', 'PM');
-
     }
 
     private function validateForm()
     {
-
         $this->load->library('form_validation');
 
         /** You can not use space between pipes |
@@ -50,21 +46,16 @@ class Posts extends MY_Controller
 
     public function add()
     {
-
-        $this->validateForm ();
+        $this->validateForm();
 
         if ($this->form_validation->run() == FALSE) {
-
             $this->data = array(
                 "page"  => (object) ["title" => 'Create Post'],
             );
 
             $this->body = 'posts';
             $this->siteLayout();
-
-
         } else {
-
             $status = $this->PM->add();
 
             $this->session->set_flashdata(
@@ -77,18 +68,15 @@ class Posts extends MY_Controller
             );
 
             redirect(base_url(), 'refresh');
-
         }
 
     }
 
     public function edit($id)
     {
-
         $this->validateForm();
 
         if ($this->form_validation->run() == FALSE) {
-
             $single_post = $this->PM->get($id);
 
             $this->data = array(
@@ -102,9 +90,7 @@ class Posts extends MY_Controller
 
             $this->body = 'posts';
             $this->siteLayout();
-
         } else {
-
             $status = $this->PM->update($id);
 
             $this->session->set_flashdata(
@@ -117,17 +103,14 @@ class Posts extends MY_Controller
             );
 
             redirect(base_url(), 'refresh');
-
         }
     }
 
     public function delete($id)
     {
-
         $this->validateForm();
 
         if ($this->form_validation->run() == FALSE) {
-
             $single_post = $this->PM->get($id);
 
             $this->data = array(
@@ -142,9 +125,7 @@ class Posts extends MY_Controller
 
             $this->body = 'posts';
             $this->siteLayout();
-
         } else {
-
             if ($this->input->post('action') === 'delete') $status = $this->PM->delete ($id);
             if ($this->input->post('action') === 'hard_delete') $status = $this->PM->delete ($id, TRUE);
 
@@ -159,14 +140,12 @@ class Posts extends MY_Controller
 
             // $this->view('home', $data);
             redirect(base_url(), 'refresh');
-
         }
     }
 
-    protected function checkAuth($single_post){
-
+    protected function checkAuth($single_post)
+    {
         if ($single_post->created_by != $this->session->userdata('user_tabid')) {
-
             $this->session->set_flashdata(
                 'db_status',
                 (object) array(
@@ -177,8 +156,6 @@ class Posts extends MY_Controller
             );
 
             redirect(base_url());
-
         }
-
     }
 }

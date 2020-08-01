@@ -3,20 +3,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pages extends MY_Controller
 {
-
     public function __construct()
     {
-
         parent::__construct();
 
         /** Load Models */
         $this->load->model('PostModel', 'PM');
         $this->load->model('UserModel', 'UM');
-
     }
 
-    public function index(){
-
+    public function index()
+    {
         $this->data = array(
             "page"    => (object) ["title" => 'Home'],
             "heading" => "Hi, Welcome to CI3 playground !
@@ -28,44 +25,32 @@ class Pages extends MY_Controller
         );
 
         if (!$this->session->userdata('user_id')) {
-
             redirect(base_url('pages/login'), 'refresh');
-
         } else {
-
             $this->body = 'home';
             $this->siteLayout();
-
         }
-
     }
 
     public function login($data = array())
     {
-
         if (empty($data)) {
-
             $this->data = array(
                 "page"  => (object) ["title" => 'Login'],
                 "form"  => (object) array(
                     "email" => (object) array("autofocus" => true)
                )
            );
-
         } else {
-
             $this->data = $data;
-
         }
 
         $this->body = 'login';
         $this->siteLayout();
-
     }
 
     public function doLogin()
     {
-
         $this->load->library('form_validation');
 
         /** You can not use space between pipes |
@@ -75,9 +60,7 @@ class Pages extends MY_Controller
         $user_list = array();
 
         foreach ($this->UM->get() as $user) {
-
             $user_list[] = $user->email;
-
         }
 
         $this->form_validation->set_rules(
@@ -94,20 +77,15 @@ class Pages extends MY_Controller
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-
             $this->login();
-
         } else {
-
             $result = $this->UM->get($this->input->post('email'));
 
             if ($result->status == 'R') {
-
                 $status  = "info";
                 $message = "You have been registered on ". indate($result->added_on) .
                            " Hrs. Please verify your email to login !";
                 $icon    = "exclamation-triangle";
-
             } elseif ($result->status == 'A' && password_verify(
                 $this->input->post('password'), $result->password)) {
 
@@ -116,16 +94,13 @@ class Pages extends MY_Controller
                 $this->session->set_userdata('user_name', $result->name);
 
                 redirect(base_url());
-
             } else {
-
                 $status = "danger";
                 $message = "Incorrect login credentials !";
                 $icon = "times";
-
             }
 
-            $this->session->set_flashdata (
+            $this->session->set_flashdata(
                 'db_status',
                 (object) array(
                     "status"  => $status,
@@ -142,24 +117,20 @@ class Pages extends MY_Controller
             );
 
         }
-
     }
 
     public function registration()
     {
-
         $this->data = array(
             "page"  => (object) ["title" => 'Registration'],
         );
 
         $this->body = 'registration';
         $this->siteLayout();
-
     }
 
     public function doRegister()
     {
-
         $this->load->library('form_validation');
 
         /** You can not use space between pipes |
@@ -203,11 +174,8 @@ class Pages extends MY_Controller
         );
 
         if ($this->form_validation->run() == FALSE) {
-
             $this->registration();
-
         } else {
-
             $status = $this->UM->register();
 
             $this->session->set_flashdata(
@@ -222,57 +190,42 @@ class Pages extends MY_Controller
             );
 
             redirect(base_url('pages/login'), 'refresh');
-
         }
-
     }
 
-    public function logout(){
-
+    public function logout()
+    {
         $this->session->sess_destroy();
 
         redirect(base_url());
-
     }
 
     public function emailVerify($token)
     {
-
         // If user already logged in then destroy current session
         if ($this->session->userdata('user_id')) {
-
             $this->session->sess_destroy();
-
         }
 
         $result = $this->UM->check_token($token);
 
         if (!empty($result->token)) {
-
             if ($result->status == 'R') {
-
                 $status = $this->UM->user_activate($result->user_id);
 
                 if ($status) {
-
                     $status = "success";
                     $message = 'Email successfully verified, Please login !';
                     $icon = "check";
-
                 } else {
-
                     $status = "danger";
                     $message = "There is some problem verifying your email please try again later !";
                     $icon = "exclamation-triangle";
-
                 }
-
             } else {
-
                 $status = "info";
                 $message = "Email already verified. Please login !";
                 $icon = "exclamation-triangle";
-
             }
 
             $this->session->set_flashdata(
@@ -285,9 +238,7 @@ class Pages extends MY_Controller
             );
 
             $this->login();
-
         } else {
-
             $this->session->set_flashdata(
                 'db_status',
                 (object) array(
@@ -304,8 +255,6 @@ class Pages extends MY_Controller
 
             $this->body = 'verify_email';
             $this->siteLayout();
-
         }
-
     }
 }

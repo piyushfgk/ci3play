@@ -3,15 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller
 {
-
     public $template = array();
     public $data = array();
 
     public function __construct()
     {
-
         parent::__construct();
-
     }
 
     /**
@@ -19,7 +16,6 @@ class MY_Controller extends CI_Controller
      */
     protected function siteLayout()
     {
-
         $this->page = 'pages/' . $this->body;
 
         if (!file_exists(APPPATH . "views/{$this->page}" . '.php')) {
@@ -33,6 +29,5 @@ class MY_Controller extends CI_Controller
         $this->template['footer'] = $this->load->view("templates/footer", $this->data, TRUE);
 
         $this->load->view('layouts/main', $this->template);
-
     }
 }

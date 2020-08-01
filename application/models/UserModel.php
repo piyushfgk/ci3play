@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class UserModel extends CI_Model
 {
-
     protected $table = 'users';
 
     public function __construct()
@@ -15,20 +14,14 @@ class UserModel extends CI_Model
         $this->load->dbforge();
 
         $this->createDatabase();
-
     }
 
     public function createDatabase()
     {
-
         if ($this->dbutil->database_exists($this->db->database)) {
-
             if (!$this->db->table_exists($this->table)) {
-
                 $this->createTable();
-
             }
-
         } else {
             /**This code is for test purpose only.
              * Above code will always executes, if connection to database established */
@@ -37,9 +30,7 @@ class UserModel extends CI_Model
                 $this->createTable();
 
             }
-
         }
-
     }
 
     public function createTable()
@@ -87,9 +78,7 @@ class UserModel extends CI_Model
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('user_id', TRUE); // gives PRIMARY KEY (user_id)
 
-
         if ($this->dbforge->create_table($this->table, TRUE)) {
-
             $this->session->set_flashdata(
                 'db_status',
                 (object) array(
@@ -98,9 +87,7 @@ class UserModel extends CI_Model
                     "icon"    => "check" ,
                 )
             );
-
         } else {
-
             $this->session->set_flashdata(
                 'db_status',
                 (object) array(
@@ -109,35 +96,26 @@ class UserModel extends CI_Model
                     "icon"    => "times",
                 )
             );
-
         }
-
     }
 
     public function get($email = NULL)
     {
-
         $email = strtolower($email);
 
         if (!empty($email)) {
-
             $query = $this->db->get_where($this->table, array("email" => $email));
             $result = $query->row();
-
         } else {
-
             $query = $this->db->get_where($this->table);
             $result = $query->result();
-
         }
 
         return $result;
-
     }
 
     public function register()
     {
-
         $email_status = FALSE;
 
         $token = random_string('alnum', 50);
@@ -158,7 +136,6 @@ class UserModel extends CI_Model
 
         if ($this->db->insert($this->table, $user_data)) {
             /** Send email if registration is successfull */
-
             $verify_link = base_url('email_verify/' . $token);
 
             $subject = 'Please verify your email - ci3play.home.in';
@@ -186,48 +163,37 @@ class UserModel extends CI_Model
                     ';
 
             $email_status = $this->send($user_email, $subject, $message);
-
         }
 
         if ($this->db->trans_status()  === FALSE || !$email_status) {
-
             $status = FALSE;
             $this->db->trans_rollback();
-
         } else {
-
             $status = TRUE;
             $this->db->trans_commit();
-
         }
 
         return $status;
-
     }
 
     public function check_token($token)
     {
-
         $query = $this->db->get_where($this->table, array("token" => $token));
         $result = $query->row();
 
         return $result;
-
     }
 
     public function user_activate($user_id)
     {
-
         $this->updated_on = date('Y-m-d H:i:s');
         $this->status = 'A';
 
         return $this->db->update($this->table, $this, array("user_id" => $user_id));
-
     }
 
     protected function send ($to, $subject, $message)
     {
-
         $this->load->config('email');
         $this->load->library('email');
 
@@ -240,7 +206,5 @@ class UserModel extends CI_Model
         $this->email->message($message);
 
         return $this->email->send();
-
     }
-
 }
