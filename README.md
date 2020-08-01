@@ -1,9 +1,16 @@
 # CodeIgniter 3 Playground for Learning (ci3play.home.in)
-## You can run this project online by setting without quotes '34.72.208.189	ci3play.home.in' in your hosts file 
+## You can run this project online by setting without quotes '34.72.208.189	ci3play.home.in' in your hosts file
 - Windows (C:\WINDOWS\system32\drivers\etc\hosts)
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**01/08/2020 13:00 Hrs**
+- Fixed file line endings from CRLF to LF only and tabs to spaces (4), also encoding to be UTF-8 only
+- Now using PSR-12 coding standard ref. https://www.php-fig.org/psr/psr-12
+- Removed view function replaced with siteLayout for more understandable page layouts
+- Applied commit and rollback to not to store user registration information if email sending failed
+- New function checkAuth added to check if a post is owned by logged in user
+
 **31/07/2020 16:00 Hrs**
 - Genarated App Password in accounts.google.com to send email from my gmail account which has 2 step verification enabled
 - Added email functionality to send
@@ -26,7 +33,7 @@
 **29/07/2020 23:00 Hrs**
 - Project flow has been changed alot, earlier posts shown in Posts page is now moved to Home page
 - UI changed including navbar and footer
-- New login/sign-in page added 
+- New login/sign-in page added
 - New route added for posts
 
 **28/07/2020 22:55 Hrs**

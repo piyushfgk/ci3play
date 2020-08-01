@@ -1,15 +1,16 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-/*Email Settings 
+/*Email Settings
 | Custom settings for test purpose only
 */
 
 $config = array(
     'protocol' => 'smtp', // 'mail', 'sendmail', or 'smtp'
-    'smtp_host' => 'smtp.gmail.com', 
+    'smtp_host' => 'smtp.gmail.com',
     'smtp_port' => 465,
-    'smtp_user' => '',
-    'smtp_pass' => '',
+    'smtp_user' => 'picool13.84@gmail.com',
+    'smtp_pass' => 'jrirdetzlhsjnvpc',
     'smtp_crypto' => 'ssl', //can be 'ssl' or 'tls' for example
     'mailtype' => 'html', //plaintext 'text' mails or 'html'
     'smtp_timeout' => '4', //in seconds
