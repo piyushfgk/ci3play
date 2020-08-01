@@ -55,3 +55,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['post'] = 'posts/add';
 $route['logout'] = 'pages/logout';
 $route['email_verify/(:any)'] = 'pages/emailVerify/$1';
+$route['password'] = 'pages/changePassword';

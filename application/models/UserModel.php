@@ -16,7 +16,7 @@ class UserModel extends CI_Model
         $this->createDatabase();
     }
 
-    public function createDatabase()
+    private function createDatabase()
     {
         if ($this->dbutil->database_exists($this->db->database)) {
             if (!$this->db->table_exists($this->table)) {
@@ -33,7 +33,7 @@ class UserModel extends CI_Model
         }
     }
 
-    public function createTable()
+    private function createTable()
     {
 
         $fields = array(
@@ -114,6 +114,19 @@ class UserModel extends CI_Model
         return $result;
     }
 
+    public function changePassword()
+    {
+        $password = password_hash($this->input->post('password'), PASSWORD_BCRYPT);
+
+        return $this->db->update($this->table,
+            array(
+                "password" => $password,
+                "updated_on" => date('Y-m-d H:i:s')
+            ),
+            array("user_id" => $this->session->userdata('user_tabid'))
+        );
+    }
+
     public function register()
     {
         $email_status = FALSE;
@@ -192,7 +205,7 @@ class UserModel extends CI_Model
         return $this->db->update($this->table, $this, array("user_id" => $user_id));
     }
 
-    protected function send ($to, $subject, $message)
+    protected function send($to, $subject, $message)
     {
         $this->load->config('email');
         $this->load->library('email');

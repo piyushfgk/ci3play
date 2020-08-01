@@ -4,6 +4,10 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**01/08/2020 23:26 Hrs**
+- Now user can change its password
+- No menu links if user not logged in
+
 **01/08/2020 13:00 Hrs**
 - Fixed file line endings from CRLF to LF only and tabs to spaces (4), also encoding to be UTF-8 only
 - Now using PSR-12 coding standard ref. https://www.php-fig.org/psr/psr-12

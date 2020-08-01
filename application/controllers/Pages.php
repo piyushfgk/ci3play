@@ -38,7 +38,7 @@ class Pages extends MY_Controller
             $this->data = array(
                 "page"  => (object) ["title" => 'Login'],
                 "form"  => (object) array(
-                    "email" => (object) array("autofocus" => true)
+                    "email" => (object) array("autofocus" => TRUE)
                )
            );
         } else {
@@ -112,7 +112,7 @@ class Pages extends MY_Controller
             $this->login(
                 array(
                     "page" => (object) ["title" => 'Login'],
-                    "form" => (object) array("password" => (object) array("autofocus" => true))
+                    "form" => (object) array("password" => (object) array("autofocus" => TRUE))
                 )
             );
 
@@ -197,7 +197,56 @@ class Pages extends MY_Controller
     {
         $this->session->sess_destroy();
 
-        redirect(base_url());
+        redirect(base_url(), 'refresh');
+    }
+
+    public function changePassword()
+    {
+        $this->data = array(
+            "page"  => (object) ["title" => 'Change Password'],
+        );
+
+        $this->body = 'password';
+
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules(
+            'password',
+            'Password',
+            'trim|required|min_length[8]|max_length[20]|regex_match[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\'_]).{8,20}$/]',
+            array(
+                "regex_match" => "%s must contain at least one small and capital letter, number
+                                  & symbol #?!@$%^&*_'"
+            )
+        );
+
+        $this->form_validation->set_rules(
+            'confirm_password',
+            'Confirm Password',
+            'trim|required|matches[password]'
+        );
+
+        if ($this->form_validation->run() === TRUE) {
+            $status = $this->UM->changePassword();
+
+            $this->session->set_flashdata(
+                'db_status',
+                (object) array(
+                    "status"  => $status === FALSE ? "danger" : "success",
+                    "message" => $status === FALSE ? "Password change error" :
+                                    "Your password has been change succesfully!
+                                    Please <a href=\"". base_url() ."\">Sign In</b>",
+                    "icon"    => $status === FALSE ? "times" : "check" ,
+                )
+            );
+
+            if ($status) {
+                $this->body = 'blank_page';
+                $this->session->sess_destroy();
+            }
+        }
+
+        $this->siteLayout();
     }
 
     public function emailVerify($token)
@@ -253,7 +302,7 @@ class Pages extends MY_Controller
                 "page"  => (object) ["title" => 'Email Verify'],
             );
 
-            $this->body = 'verify_email';
+            $this->body = 'blank_page';
             $this->siteLayout();
         }
     }

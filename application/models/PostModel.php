@@ -19,7 +19,7 @@ class PostModel extends CI_Model
         $this->created_by = $this->session->userdata('user_tabid');
     }
 
-    public function createDatabase()
+    private function createDatabase()
     {
 
         if ($this->dbutil->database_exists($this->db->database)) {
@@ -37,7 +37,7 @@ class PostModel extends CI_Model
         }
     }
 
-    public function createTable()
+    private function createTable()
     {
         $fields = array(
             'id' => array(

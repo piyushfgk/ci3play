@@ -21,7 +21,7 @@
         z-index: 1;
     }
 
-    #registration--form{
+    #registration--form {
         width: 400px;
         margin: 0 auto;
     }
