@@ -4,6 +4,9 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**02/08/2020 20:00 Hrs**
+- Enabled captcha at login
+
 **01/08/2020 23:26 Hrs**
 - Now user can change its password
 - No menu links if user not logged in

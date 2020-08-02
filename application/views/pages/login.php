@@ -19,7 +19,7 @@
         font-weight: 400;
     }
 
-    .form-signin .form-control {
+    .form-signin .form-control.in {
         position: relative;
         box-sizing: border-box;
         height: auto;
@@ -58,16 +58,22 @@
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
     <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" name="email" id="inputEmail" class="form-control  <?php echo !empty(form_error('email')) ? 'is-invalid' : NULL; ?>" placeholder="Email address" value="<?= set_value('email') ?>" <?= !empty($form->email->autofocus) ? 'autofocus' : NULL; ?> >
+    <input type="email" name="email" id="inputEmail" class="form-control in <?php echo !empty(form_error('email')) ? 'is-invalid' : NULL; ?>" placeholder="Email address" value="<?= set_value('email') ?>" <?= !empty($form->email->autofocus) ? 'autofocus' : NULL; ?> >
 
     <label for="inputPassword" class="sr-only">Password</label>
-    <input name="password" type="password" id="inputPassword" class="form-control" placeholder="Password"  value="<?= set_value('password') ?>" <?= !empty($form->password->autofocus) ? 'autofocus' : NULL; ?> >
+    <input name="password" type="password" id="inputPassword" class="form-control in" placeholder="Password"  value="<?= set_value('password') ?>" <?= !empty($form->password->autofocus) ? 'autofocus' : NULL; ?> >
+
+    <div class="text-center mt-5"> <?= $form->captcha->image ?> </div>
+    <label for="inputCaptcha" class="sr-only">Captcha</label>
+    <input type="text" class="form-control form-control-sm text-center" name="captcha" value="" id="inputCaptcha" placeholder="Enter captcha">
 
     <div class="checkbox mb-3">
     <!-- <label>
         <input type="checkbox" value="remember-me"> Remember me
     </label> -->
     </div>
+
+
 
     <button class="btn btn-lg btn-primary btn-block" type="submit"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-in-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">  <path fill-rule="evenodd" d="M8.146 11.354a.5.5 0 0 1 0-.708L10.793 8 8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"/>  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 1 8z"/>  <path fill-rule="evenodd" d="M13.5 14.5A1.5 1.5 0 0 0 15 13V3a1.5 1.5 0 0 0-1.5-1.5h-8A1.5 1.5 0 0 0 4 3v1.5a.5.5 0 0 0 1 0V3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5h-8A.5.5 0 0 1 5 13v-1.5a.5.5 0 0 0-1 0V13a1.5 1.5 0 0 0 1.5 1.5h8z"/></svg> Sign in</button>
 
