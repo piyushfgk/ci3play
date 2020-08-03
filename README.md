@@ -4,6 +4,10 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**03/08/2020 20:28 Hrs**
+- Added Google reCAPTCHA (v2 Invisible)
+- Removed codeignitor built in captcha
+
 **02/08/2020 20:00 Hrs**
 - Enabled captcha at login
 

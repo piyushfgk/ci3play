@@ -1,3 +1,5 @@
+<script src="<?= base_url('js/ckeditor-full/ckeditor.js') ?>"></script>
+
 <div class="container">
 
     <?php if($page->title == 'Create Post' || $page->title == 'Edit Post' || $page->title == 'Delete Post'): ?>
@@ -45,3 +47,9 @@
     <?php endif; ?>
 
 </div>
+
+<script>
+    // Replace the <textarea id="editor1"> with a CKEditor 4
+    // instance, using default configuration.
+    CKEDITOR.replace( 'description' );
+</script>

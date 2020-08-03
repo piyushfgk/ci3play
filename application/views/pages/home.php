@@ -19,7 +19,7 @@
                 </div>
                 <div class="card-body">
                     <p class="card-title text-right text-secondary"><strong>Added on:</strong> <?= indate($post->added_on) ?> <span class="badge bg-primary"><?= $post->name ?></span>  </p>
-                    <p class="card-text"><?= nl2br($post->description) ?></p>
+                    <p class="card-text"><?= $post->description ?></p>
                 </div>
             </div>
         <?php endforeach; ?>

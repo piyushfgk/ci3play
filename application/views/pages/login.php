@@ -45,11 +45,18 @@
 
 </style>
 
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+    function onSubmit(token) {
+        document.getElementById("form-signin").submit();
+    }
+</script>
+
 <div class="container mt-2">
     <?= validation_errors('<div class="alert alert-danger" role="alert">','</div>'); ?>
 </div>
 
-<?= form_open('pages/doLogin', array("class" => "form-signin")) ?>
+<?= form_open('pages/doLogin', array("class" => "form-signin", "id" => "form-signin")) ?>
 
     <svg width="5em" height="5em" viewBox="0 0 16 16" class="bi bi-bootstrap-fill" fill="#fd7e14" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M4.002 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4h-8zm1.06 12h3.475c1.804 0 2.888-.908 2.888-2.396 0-1.102-.761-1.916-1.904-2.034v-.1c.832-.14 1.482-.93 1.482-1.816 0-1.3-.955-2.11-2.542-2.11H5.062V12zm1.313-4.875V4.658h1.78c.973 0 1.542.457 1.542 1.237 0 .802-.604 1.23-1.764 1.23H6.375zm0 3.762h1.898c1.184 0 1.81-.48 1.81-1.377 0-.885-.65-1.348-1.886-1.348H6.375v2.725z"/>
@@ -63,9 +70,9 @@
     <label for="inputPassword" class="sr-only">Password</label>
     <input name="password" type="password" id="inputPassword" class="form-control in" placeholder="Password"  value="<?= set_value('password') ?>" <?= !empty($form->password->autofocus) ? 'autofocus' : NULL; ?> >
 
-    <div class="text-center mt-5"> <?= $form->captcha->image ?> </div>
+    <!-- <div class="text-center mt-5"> <?= $form->captcha->image ?> </div>
     <label for="inputCaptcha" class="sr-only">Captcha</label>
-    <input type="text" class="form-control form-control-sm text-center" name="captcha" value="" id="inputCaptcha" placeholder="Enter captcha">
+    <input type="text" class="form-control form-control-sm text-center" name="captcha" value="" id="inputCaptcha" placeholder="Enter captcha"> -->
 
     <div class="checkbox mb-3">
     <!-- <label>
@@ -73,9 +80,7 @@
     </label> -->
     </div>
 
-
-
-    <button class="btn btn-lg btn-primary btn-block" type="submit"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-in-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">  <path fill-rule="evenodd" d="M8.146 11.354a.5.5 0 0 1 0-.708L10.793 8 8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"/>  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 1 8z"/>  <path fill-rule="evenodd" d="M13.5 14.5A1.5 1.5 0 0 0 15 13V3a1.5 1.5 0 0 0-1.5-1.5h-8A1.5 1.5 0 0 0 4 3v1.5a.5.5 0 0 0 1 0V3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5h-8A.5.5 0 0 1 5 13v-1.5a.5.5 0 0 0-1 0V13a1.5 1.5 0 0 0 1.5 1.5h8z"/></svg> Sign in</button>
+    <button class="btn btn-lg btn-primary btn-block g-recaptcha" type="submit" data-sitekey="6LcP67kZAAAAACZGPQwAZ2n1yZViV6U8QEWP02Uv" data-callback='onSubmit'><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-box-arrow-in-right" fill="currentColor" xmlns="http://www.w3.org/2000/svg">  <path fill-rule="evenodd" d="M8.146 11.354a.5.5 0 0 1 0-.708L10.793 8 8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0z"/>  <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 1 8z"/>  <path fill-rule="evenodd" d="M13.5 14.5A1.5 1.5 0 0 0 15 13V3a1.5 1.5 0 0 0-1.5-1.5h-8A1.5 1.5 0 0 0 4 3v1.5a.5.5 0 0 0 1 0V3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v10a.5.5 0 0 1-.5.5h-8A.5.5 0 0 1 5 13v-1.5a.5.5 0 0 0-1 0V13a1.5 1.5 0 0 0 1.5 1.5h8z"/></svg> Sign in</button>
 
     <p class="text-center mt-2">Not registered ? <a href="<?= base_url('pages/registration') ?>">Sign up</a> </p>
 

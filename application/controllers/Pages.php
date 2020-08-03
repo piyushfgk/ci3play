@@ -10,7 +10,7 @@ class Pages extends MY_Controller
         /** Load Models */
         $this->load->model('PostModel', 'PM');
         $this->load->model('UserModel', 'UM');
-        $this->load->model('CaptchaModel', 'CM');
+        // $this->load->model('CaptchaModel', 'CM');
     }
 
     public function index()
@@ -40,11 +40,11 @@ class Pages extends MY_Controller
                 "page"  => (object) ["title" => 'Login'],
                 "form"  => (object) array(
                     "email" => (object) array("autofocus" => TRUE),
-                    "captcha" => (object) $this->CM->createCaptcha()
+                    // "captcha" => (object) $this->CM->createCaptcha()
                )
            );
 
-           $this->session->set_userdata('captcha', $this->data['form']->captcha->word);
+        //    $this->session->set_userdata('captcha', $this->data['form']->captcha->word);
 
         } else {
             $this->data = $data;
@@ -81,14 +81,14 @@ class Pages extends MY_Controller
 
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
 
-        $this->form_validation->set_rules(
-            'captcha',
-            'Captcha',
-            'trim|required|in_list[' . $this->session->userdata('captcha') . ']',
-            array(
-                "in_list" => "%s does not matched. Try again !"
-            )
-        );
+        // $this->form_validation->set_rules(
+        //     'captcha',
+        //     'Captcha',
+        //     'trim|required|in_list[' . $this->session->userdata('captcha') . ']',
+        //     array(
+        //         "in_list" => "%s does not matched. Try again !"
+        //     )
+        // );
 
         if ($this->form_validation->run() == FALSE) {
             $this->login();
@@ -128,7 +128,7 @@ class Pages extends MY_Controller
                     "page" => (object) ["title" => 'Login'],
                     "form" => (object) array(
                                 "password" => (object) array("autofocus" => TRUE),
-                                "captcha" => (object) $this->CM->createCaptcha()
+                                // "captcha" => (object) $this->CM->createCaptcha()
                             )
                 )
             );
