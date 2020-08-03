@@ -23,6 +23,9 @@
                 </div>
             </div>
         <?php endforeach; ?>
+        <nav aria-label="Page navigation example" class="d-flex justify-content-end">
+            <?= $pagination ?>
+        </nav>
     <?php else: ?>
         <div class="card">
             <div class="card-header">

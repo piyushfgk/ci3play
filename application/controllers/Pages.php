@@ -13,8 +13,30 @@ class Pages extends MY_Controller
         // $this->load->model('CaptchaModel', 'CM');
     }
 
-    public function index()
+    public function index($page = 1)
     {
+        $this->load->library('pagination');
+
+        $limit = 2;
+
+        $config['base_url'] = base_url('page');
+        $config['total_rows'] = count($this->PM->get());
+        $config['per_page'] = $limit;
+        $config['use_page_numbers'] = TRUE;
+
+        $config['attributes'] = array('class' => 'page-link');
+
+        $config['first_url'] = base_url('page/1');
+
+        $config['full_tag_open'] = '<ul class="pagination">';
+        $config['full_tag_close'] = '</ul>';
+
+        $config['cur_tag_open'] = '<li class="page-item active" aria-current="page">' .
+                                  '<a class="page-link" href="">';
+        $config['cur_tag_close'] = '</a></li>';
+
+        $this->pagination->initialize($config);
+
         $this->data = array(
             "page"    => (object) ["title" => 'Home'],
             "heading" => "Hi, Welcome to CI3 playground !
@@ -22,7 +44,8 @@ class Pages extends MY_Controller
                          text-center'>Add a new post using
                          <a class=\"text-secondary\"href=\""
                          . base_url('post') . "\">Posts</a> menu !</p>",
-            "posts"   => $this->PM->get()
+            "posts"   => $this->PM->get_page($page, $limit),
+            "pagination" => $this->pagination->create_links()
         );
 
         if (!$this->session->userdata('user_id')) {

@@ -4,6 +4,9 @@
 - Unix or Mac (/etc/hosts)
 
 ## Project History
+**04/08/2020 00:52 Hrs**
+- Added pagination to posts
+
 **03/08/2020 20:28 Hrs**
 - Added Google reCAPTCHA (v2 Invisible)
 - Removed codeignitor built in captcha

@@ -120,6 +120,24 @@ class PostModel extends CI_Model
         return $result;
     }
 
+    public function get_page($page = 1, $limit = 2)
+    {
+        $page = ($page * $limit) - $limit;
+
+        $this->db->limit($limit, $page);
+        $this->db->order_by('latest_by DESC ');
+        $this->db->select('*');
+        $this->db->from($this->table);
+        $this->db->where("{$this->table}.status !=", 'D');
+        $this->db->join('users', 'users.user_id = '.$this->table.'.created_by');
+
+        $query = $this->db->get();
+
+        $result = $query->result();
+
+        return $result;
+    }
+
     public function add()
     {
         $this->title = $this->input->post('title');
