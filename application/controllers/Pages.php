@@ -3,347 +3,338 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Pages extends MY_Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 
-        /** Load Models */
-        $this->load->model('PostModel', 'PM');
-        $this->load->model('UserModel', 'UM');
-        // $this->load->model('CaptchaModel', 'CM');
-    }
+		/** Load Models */
+		$this->load->model('PostModel', 'PM');
+		$this->load->model('UserModel', 'UM');
+		// $this->load->model('CaptchaModel', 'CM');
+	}
 
-    public function index($page = 1)
-    {
-        $this->load->library('pagination');
+	public function index($page = 1)
+	{
+		$this->load->library('pagination');
 
-        $limit = 2;
+		$limit = 5;
 
-        $config['base_url'] = base_url('page');
-        $config['total_rows'] = count($this->PM->get());
-        $config['per_page'] = $limit;
-        $config['use_page_numbers'] = TRUE;
+		// Base pagination URL
+		$this->paginationConfig['base_url'] = base_url('page');
+		// Total number of rows
+		$this->paginationConfig['total_rows'] = count($this->PM->get());
+		// Per page
+		$this->paginationConfig['per_page'] = $limit;
 
-        $config['attributes'] = array('class' => 'page-link');
+		$this->pagination->initialize($this->paginationConfig);
 
-        $config['first_url'] = base_url('page/1');
+		$this->data = array(
+			"page"    => (object) ["title" => 'Home'],
+			"heading" => "Hi, Welcome to CI3 playground !
+						 <p class='h6 bg-info text-light py-2 mt-2
+						 text-center'>Add a new post using
+						 <a class=\"text-secondary\"href=\""
+						 . base_url('post') . "\">Posts</a> menu !</p>",
+			"posts"   => $this->PM->get_page($page, $limit),
+			"pagination" => $this->pagination->create_links()
+		);
 
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
+		if (!$this->session->userdata('user_id')) {
+			redirect(base_url('pages/login'), 'refresh');
+		} else {
+			$this->body = 'home';
+			$this->siteLayout();
+		}
+	}
 
-        $config['cur_tag_open'] = '<li class="page-item active" aria-current="page">' .
-                                  '<a class="page-link" href="">';
-        $config['cur_tag_close'] = '</a></li>';
+	public function login($data = array())
+	{
+		if (empty($data)) {
+			$this->data = array(
+				"page"  => (object) ["title" => 'Login'],
+				"form"  => (object) array(
+					"email" => (object) array("autofocus" => TRUE),
+					// "captcha" => (object) $this->CM->createCaptcha()
+			   )
+		   );
 
-        $this->pagination->initialize($config);
+		//    $this->session->set_userdata('captcha', $this->data['form']->captcha->word);
 
-        $this->data = array(
-            "page"    => (object) ["title" => 'Home'],
-            "heading" => "Hi, Welcome to CI3 playground !
-                         <p class='h6 bg-info text-light py-2 mt-2
-                         text-center'>Add a new post using
-                         <a class=\"text-secondary\"href=\""
-                         . base_url('post') . "\">Posts</a> menu !</p>",
-            "posts"   => $this->PM->get_page($page, $limit),
-            "pagination" => $this->pagination->create_links()
-        );
+		} else {
+			$this->data = $data;
+		}
 
-        if (!$this->session->userdata('user_id')) {
-            redirect(base_url('pages/login'), 'refresh');
-        } else {
-            $this->body = 'home';
-            $this->siteLayout();
-        }
-    }
+		$this->body = 'login';
+		$this->siteLayout();
+	}
 
-    public function login($data = array())
-    {
-        if (empty($data)) {
-            $this->data = array(
-                "page"  => (object) ["title" => 'Login'],
-                "form"  => (object) array(
-                    "email" => (object) array("autofocus" => TRUE),
-                    // "captcha" => (object) $this->CM->createCaptcha()
-               )
-           );
+	public function doLogin()
+	{
+		$this->load->library('form_validation');
 
-        //    $this->session->set_userdata('captcha', $this->data['form']->captcha->word);
+		/** You can not use space between pipes |
+		 * Rules must be adjacent to one another seperated by pipes only
+		 * */
 
-        } else {
-            $this->data = $data;
-        }
+		$user_list = array();
 
-        $this->body = 'login';
-        $this->siteLayout();
-    }
+		foreach ($this->UM->get() as $user) {
+			$user_list[] = $user->email;
+		}
 
-    public function doLogin()
-    {
-        $this->load->library('form_validation');
+		$this->form_validation->set_rules(
+			'email',
+			'Email',
+			'trim|required|valid_email|min_length[8]|max_length[100]|in_list[' . implode(",",$user_list) . ']',
+			array(
+				"min_length" => "%s must be at least 8 characters long",
+				"max_length" => "%s can not be more than 100 characters",
+				"in_list" => "%s is not registered with us, please <strong>Sign Up!</strong>"
+			)
+		);
 
-        /** You can not use space between pipes |
-         * Rules must be adjacent to one another seperated by pipes only
-         * */
+		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 
-        $user_list = array();
+		// $this->form_validation->set_rules(
+		//     'captcha',
+		//     'Captcha',
+		//     'trim|required|in_list[' . $this->session->userdata('captcha') . ']',
+		//     array(
+		//         "in_list" => "%s does not matched. Try again !"
+		//     )
+		// );
 
-        foreach ($this->UM->get() as $user) {
-            $user_list[] = $user->email;
-        }
+		if ($this->form_validation->run() == FALSE) {
+			$this->login();
+		} else {
+			$result = $this->UM->get($this->input->post('email'));
 
-        $this->form_validation->set_rules(
-            'email',
-            'Email',
-            'trim|required|valid_email|min_length[8]|max_length[100]|in_list[' . implode(",",$user_list) . ']',
-            array(
-                "min_length" => "%s must be at least 8 characters long",
-                "max_length" => "%s can not be more than 100 characters",
-                "in_list" => "%s is not registered with us, please <strong>Sign Up!</strong>"
-            )
-        );
+			if ($result->status == 'R') {
+				$status  = "info";
+				$message = "You have been registered on ". indate($result->added_on) .
+						   " Hrs. Please verify your email to login !";
+				$icon    = "exclamation-triangle";
+			} elseif ($result->status == 'A' && password_verify(
+				$this->input->post('password'), $result->password)) {
 
-        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+				$this->session->set_userdata('user_tabid', $result->user_id);
+				$this->session->set_userdata('user_id', $result->email);
+				$this->session->set_userdata('user_name', $result->name);
 
-        // $this->form_validation->set_rules(
-        //     'captcha',
-        //     'Captcha',
-        //     'trim|required|in_list[' . $this->session->userdata('captcha') . ']',
-        //     array(
-        //         "in_list" => "%s does not matched. Try again !"
-        //     )
-        // );
+				redirect(base_url());
+			} else {
+				$status = "danger";
+				$message = "Incorrect login credentials !";
+				$icon = "times";
+			}
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->login();
-        } else {
-            $result = $this->UM->get($this->input->post('email'));
+			$this->session->set_flashdata(
+				'db_status',
+				(object) array(
+					"status"  => $status,
+					"message" => $message,
+					"icon"    => $icon,
+				)
+			);
 
-            if ($result->status == 'R') {
-                $status  = "info";
-                $message = "You have been registered on ". indate($result->added_on) .
-                           " Hrs. Please verify your email to login !";
-                $icon    = "exclamation-triangle";
-            } elseif ($result->status == 'A' && password_verify(
-                $this->input->post('password'), $result->password)) {
+			$this->login(
+				array(
+					"page" => (object) ["title" => 'Login'],
+					"form" => (object) array(
+								"password" => (object) array("autofocus" => TRUE),
+								// "captcha" => (object) $this->CM->createCaptcha()
+							)
+				)
+			);
 
-                $this->session->set_userdata('user_tabid', $result->user_id);
-                $this->session->set_userdata('user_id', $result->email);
-                $this->session->set_userdata('user_name', $result->name);
+		}
+	}
 
-                redirect(base_url());
-            } else {
-                $status = "danger";
-                $message = "Incorrect login credentials !";
-                $icon = "times";
-            }
+	public function registration()
+	{
+		$this->data = array(
+			"page"  => (object) ["title" => 'Registration'],
+		);
 
-            $this->session->set_flashdata(
-                'db_status',
-                (object) array(
-                    "status"  => $status,
-                    "message" => $message,
-                    "icon"    => $icon,
-                )
-            );
+		$this->body = 'registration';
+		$this->siteLayout();
+	}
 
-            $this->login(
-                array(
-                    "page" => (object) ["title" => 'Login'],
-                    "form" => (object) array(
-                                "password" => (object) array("autofocus" => TRUE),
-                                // "captcha" => (object) $this->CM->createCaptcha()
-                            )
-                )
-            );
+	public function doRegister()
+	{
+		$this->load->library('form_validation');
 
-        }
-    }
+		/** You can not use space between pipes |
+		 * Rules must be adjacent to one another seperated by pipes only
+		 * */
+		$this->form_validation->set_rules(
+			'name',
+			'Name',
+			'trim|required|min_length[2]|max_length[50]|regex_match[/^[a-zA-Z ]{2,}$/]',
+			array(
+				"min_length"   => "%s must be at least 2 characters long",
+				"max_length"   => "%s can not be greater than 50 characters",
+				"regex_match"  => "%s is not valid !"
+			)
+		);
 
-    public function registration()
-    {
-        $this->data = array(
-            "page"  => (object) ["title" => 'Registration'],
-        );
+		$this->form_validation->set_rules(
+			'email',
+			'Email',
+			'trim|required|valid_email|min_length[10]|max_length[50]|is_unique[users.email]',
+			array(
+				"min_length" => "%s must be at least 10 characters long",
+				"max_length" => "%s can not be more than 100 characters",
+				"is_unique"  => "%s email ID is already registered, Please login !")
+		);
 
-        $this->body = 'registration';
-        $this->siteLayout();
-    }
+		$this->form_validation->set_rules(
+			'password',
+			'Password',
+			'trim|required|min_length[8]|max_length[20]|regex_match[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\'_]).{8,20}$/]',
+			array(
+				"regex_match" => "%s must contain at least one small and capital letter, number
+								  & symbol #?!@$%^&*_'"
+			)
+		);
 
-    public function doRegister()
-    {
-        $this->load->library('form_validation');
+		$this->form_validation->set_rules(
+			'confirm_password',
+			'Confirm Password',
+			'trim|required|matches[password]'
+		);
 
-        /** You can not use space between pipes |
-         * Rules must be adjacent to one another seperated by pipes only
-         * */
-        $this->form_validation->set_rules(
-            'name',
-            'Name',
-            'trim|required|min_length[2]|max_length[50]|regex_match[/^[a-zA-Z ]{2,}$/]',
-            array(
-                "min_length"   => "%s must be at least 2 characters long",
-                "max_length"   => "%s can not be greater than 50 characters",
-                "regex_match"  => "%s is not valid !"
-            )
-        );
+		if ($this->form_validation->run() == FALSE) {
+			$this->registration();
+		} else {
+			$status = $this->UM->register();
 
-        $this->form_validation->set_rules(
-            'email',
-            'Email',
-            'trim|required|valid_email|min_length[10]|max_length[50]|is_unique[users.email]',
-            array(
-                "min_length" => "%s must be at least 10 characters long",
-                "max_length" => "%s can not be more than 100 characters",
-                "is_unique"  => "%s email ID is already registered, Please login !")
-        );
+			$this->session->set_flashdata(
+				'db_status',
+				(object) array(
+					"status"  => $status === FALSE ? "danger" : "success",
+					"message" => $status === FALSE ? "Registration error" :
+									"Registration successfull! Please check your
+									email to verify &amp; activate your login !",
+					"icon"    => $status === FALSE ? "times" : "check" ,
+				)
+			);
 
-        $this->form_validation->set_rules(
-            'password',
-            'Password',
-            'trim|required|min_length[8]|max_length[20]|regex_match[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\'_]).{8,20}$/]',
-            array(
-                "regex_match" => "%s must contain at least one small and capital letter, number
-                                  & symbol #?!@$%^&*_'"
-            )
-        );
+			redirect(base_url('pages/login'), 'refresh');
+		}
+	}
 
-        $this->form_validation->set_rules(
-            'confirm_password',
-            'Confirm Password',
-            'trim|required|matches[password]'
-        );
+	public function logout()
+	{
+		$this->session->sess_destroy();
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->registration();
-        } else {
-            $status = $this->UM->register();
+		redirect(base_url(), 'refresh');
+	}
 
-            $this->session->set_flashdata(
-                'db_status',
-                (object) array(
-                    "status"  => $status === FALSE ? "danger" : "success",
-                    "message" => $status === FALSE ? "Registration error" :
-                                    "Registration successfull! Please check your
-                                    email to verify &amp; activate your login !",
-                    "icon"    => $status === FALSE ? "times" : "check" ,
-                )
-            );
+	public function changePassword()
+	{
+		$this->data = array(
+			"page"  => (object) ["title" => 'Change Password'],
+		);
 
-            redirect(base_url('pages/login'), 'refresh');
-        }
-    }
+		$this->body = 'password';
 
-    public function logout()
-    {
-        $this->session->sess_destroy();
+		$this->load->library('form_validation');
 
-        redirect(base_url(), 'refresh');
-    }
+		$this->form_validation->set_rules(
+			'password',
+			'Password',
+			'trim|required|min_length[8]|max_length[20]|regex_match[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\'_]).{8,20}$/]',
+			array(
+				"regex_match" => "%s must contain at least one small and capital letter, number
+								  & symbol #?!@$%^&*_'"
+			)
+		);
 
-    public function changePassword()
-    {
-        $this->data = array(
-            "page"  => (object) ["title" => 'Change Password'],
-        );
+		$this->form_validation->set_rules(
+			'confirm_password',
+			'Confirm Password',
+			'trim|required|matches[password]'
+		);
 
-        $this->body = 'password';
+		if ($this->form_validation->run() === TRUE) {
+			$status = $this->UM->changePassword();
 
-        $this->load->library('form_validation');
+			$this->session->set_flashdata(
+				'db_status',
+				(object) array(
+					"status"  => $status === FALSE ? "danger" : "success",
+					"message" => $status === FALSE ? "Password change error" :
+									"Your password has been change succesfully!
+									Please <a href=\"". base_url() ."\">Sign In</b>",
+					"icon"    => $status === FALSE ? "times" : "check" ,
+				)
+			);
 
-        $this->form_validation->set_rules(
-            'password',
-            'Password',
-            'trim|required|min_length[8]|max_length[20]|regex_match[/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*\'_]).{8,20}$/]',
-            array(
-                "regex_match" => "%s must contain at least one small and capital letter, number
-                                  & symbol #?!@$%^&*_'"
-            )
-        );
+			if ($status) {
+				$this->body = 'blank_page';
+				$this->session->sess_destroy();
+			}
+		}
 
-        $this->form_validation->set_rules(
-            'confirm_password',
-            'Confirm Password',
-            'trim|required|matches[password]'
-        );
+		$this->siteLayout();
+	}
 
-        if ($this->form_validation->run() === TRUE) {
-            $status = $this->UM->changePassword();
+	public function emailVerify($token)
+	{
+		// If user already logged in then destroy current session
+		if ($this->session->userdata('user_id')) {
+			$this->session->sess_destroy();
+		}
 
-            $this->session->set_flashdata(
-                'db_status',
-                (object) array(
-                    "status"  => $status === FALSE ? "danger" : "success",
-                    "message" => $status === FALSE ? "Password change error" :
-                                    "Your password has been change succesfully!
-                                    Please <a href=\"". base_url() ."\">Sign In</b>",
-                    "icon"    => $status === FALSE ? "times" : "check" ,
-                )
-            );
+		$result = $this->UM->check_token($token);
 
-            if ($status) {
-                $this->body = 'blank_page';
-                $this->session->sess_destroy();
-            }
-        }
+		if (!empty($result->token)) {
+			if ($result->status == 'R') {
+				$status = $this->UM->user_activate($result->user_id);
 
-        $this->siteLayout();
-    }
+				if ($status) {
+					$status = "success";
+					$message = 'Email successfully verified, Please login !';
+					$icon = "check";
+				} else {
+					$status = "danger";
+					$message = "There is some problem verifying your email please try again later !";
+					$icon = "exclamation-triangle";
+				}
+			} else {
+				$status = "info";
+				$message = "Email already verified. Please login !";
+				$icon = "exclamation-triangle";
+			}
 
-    public function emailVerify($token)
-    {
-        // If user already logged in then destroy current session
-        if ($this->session->userdata('user_id')) {
-            $this->session->sess_destroy();
-        }
+			$this->session->set_flashdata(
+				'db_status',
+				(object) array(
+					"status"  => $status,
+					"message" => $message,
+					"icon"    => $icon,
+				)
+			);
 
-        $result = $this->UM->check_token($token);
+			$this->login();
+		} else {
+			$this->session->set_flashdata(
+				'db_status',
+				(object) array(
+					"status"  => 'danger',
+					"message" => 'Invalid Token Error! Email verification failed,
+								 Please check your link.',
+					"icon"    => 'exclamation-triangle',
+				)
+			);
 
-        if (!empty($result->token)) {
-            if ($result->status == 'R') {
-                $status = $this->UM->user_activate($result->user_id);
+			$this->data = array(
+				"page"  => (object) ["title" => 'Email Verify'],
+			);
 
-                if ($status) {
-                    $status = "success";
-                    $message = 'Email successfully verified, Please login !';
-                    $icon = "check";
-                } else {
-                    $status = "danger";
-                    $message = "There is some problem verifying your email please try again later !";
-                    $icon = "exclamation-triangle";
-                }
-            } else {
-                $status = "info";
-                $message = "Email already verified. Please login !";
-                $icon = "exclamation-triangle";
-            }
-
-            $this->session->set_flashdata(
-                'db_status',
-                (object) array(
-                    "status"  => $status,
-                    "message" => $message,
-                    "icon"    => $icon,
-                )
-            );
-
-            $this->login();
-        } else {
-            $this->session->set_flashdata(
-                'db_status',
-                (object) array(
-                    "status"  => 'danger',
-                    "message" => 'Invalid Token Error! Email verification failed,
-                                 Please check your link.',
-                    "icon"    => 'exclamation-triangle',
-                )
-            );
-
-            $this->data = array(
-                "page"  => (object) ["title" => 'Email Verify'],
-            );
-
-            $this->body = 'blank_page';
-            $this->siteLayout();
-        }
-    }
+			$this->body = 'blank_page';
+			$this->siteLayout();
+		}
+	}
 }

@@ -100,7 +100,7 @@ if (ENVIRONMENT === 'production') {
 if (ENVIRONMENT === 'development') {
     $db['default'] = array(
         'dsn'    => '',
-        'hostname' => '172.68.210.183',
+        'hostname' => '172.68.100.10',
         'username' => 'Administrator',
         'password' => 'nochange',
         'database' => 'eadmin',

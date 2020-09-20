@@ -53,6 +53,8 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
+	$_SERVER['CI_ENV'] = $_SERVER['SERVER_NAME'] === 'ci3play.home.in' ? 'development' : 'production';
+
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
@@ -97,7 +99,7 @@ switch (ENVIRONMENT)
  * This variable must contain the name of your "system" directory.
  * Set the path if it is not in the same directory as this file.
  */
-	$system_path = '/var/www/html/ci3play.home.in/system';
+	$system_path = '../system';
 
 /*
  *---------------------------------------------------------------
@@ -114,7 +116,7 @@ switch (ENVIRONMENT)
  *
  * NO TRAILING SLASH!
  */
-	$application_folder = '/var/www/html/ci3play.home.in/application';
+	$application_folder = '../application';
 
 /*
  *---------------------------------------------------------------
