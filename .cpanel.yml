@@ -1,1 +1,5 @@
-
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/fgkurcco/test_deploy
+    - /bin/cp -R application $DEPLOYPATH
+    - /bin/cp -R system $DEPLOYPATH
