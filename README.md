@@ -1,4 +1,4 @@
-# CodeIgniter 3 Playground for Learning (ci3play.home.in)
+# CodeIgniter 3 Playground for Learning
 
 ## Project History
 **04/08/2020 00:52 Hrs**
